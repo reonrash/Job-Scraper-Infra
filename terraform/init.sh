@@ -10,11 +10,11 @@ dnf install -y git
 cd /home/ec2-user
 
 cat <<EOF > /home/ec2-user/.mb.env
-MB_DB_HOST=[your-metabase-db-endpoint]
+MB_DB_HOST=[your-metabase_db_endpoint]
 MB_DB_PORT=5432
-MB_DB_NAME=jobsdb
+MB_DB_NAME=metabasedb
 MB_DB_USER=postgres
-MB_DB_PASS=[your-rds-password]
+MB_DB_PASSWORD=[your-rds-password]
 EOF
 
 chmod 600 /home/ec2-user/.mb.env
@@ -23,11 +23,11 @@ chown ec2-user:ec2-user /home/ec2-user/.mb.env
 git clone https://github.com/reonrash/databricks-job-tracker.git
 
 cat <<EOF > /home/ec2-user/databricks-job-tracker/.env
-MB_DB_HOST=[your-metabase-db-endpoint]
-MB_DB_PORT=5432
-MB_DB_NAME=jobsdb
-MB_DB_USER=postgres
-MB_DB_PASS=[your-rds-password]
+DB_HOST=[your-jobs_db_endpoint]
+DB_PORT=5432
+DB_NAME=jobsdb
+DB_USER=postgres
+DB_PASS=[your-rds-password]
 EOF
 
 chmod 600 /home/ec2-user/databricks-job-tracker/.env

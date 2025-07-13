@@ -126,7 +126,7 @@ Follow the prompts to set up Metabase and connect it to your job data database.
 
 ## Step 6: Tear Down Infrastructure
 
-When you're done, destroy all resources from your local machine (in your project directory) to avoid charges:
+When you're done, destroy all resources on related to this proj (in your project directory) to avoid charges:
 
 ```bash
 terraform destroy

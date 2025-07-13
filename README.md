@@ -50,26 +50,26 @@ metabase_db_endpoint = "metabase-db.cyp4keqss5qm.us-east-1.rds.amazonaws.com"
 
 ## Step 3: Set Up Environment Files
 
-You'll need two `.env` files for your applications. **These are examples – fill them in with your actual database hosts and passwords\!**
+There are two env files already created but need user input for two fields. **These are examples – fill them in with your actual database hosts and passwords\!**
 
-### For the Job Scraper (`.env`):
+### For the Job Scraper (`.env`) cd /home/ec2-user/databricks-job-tracker/.env:
 
 ```env
-DB_HOST=your_jobs_db_endpoint_from_terraform_output
+DB_HOST=[your_jobs_db_endpoint_from_terraform_output]
 DB_PORT=5432
 DB_NAME=jobsdb
 DB_USER=postgres
-DB_PASSWORD=your_chosen_jobs_db_password
+DB_PASSWORD=[your_chosen_jobs_db_password]
 ```
 
-### For Metabase (`.mb.env`):
+### For Metabase (`.mb.env`) cd /home/ec2-user/.mb.env:
 
 ```env
-MB_DB_HOST=your_metabase_db_endpoint_from_terraform_output
+MB_DB_HOST=your_[metabase_db_endpoint_from_terraform_output]
 MB_DB_PORT=5432
 MB_DB_NAME=metabasedb
 MB_DB_USER=postgres
-MB_DB_PASS=your_chosen_metabase_db_password
+MB_DB_PASS=[your_chosen_metabase_db_password]
 ```
 
 -----

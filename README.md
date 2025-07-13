@@ -1,29 +1,20 @@
-# Databricks Job Scraper Infrastructure Deployment
+# Databricks Job Scraper: Infrastructure Deployment
 
-## Purpose
+This guide helps you deploy the AWS infrastructure needed for a Databricks job scraper using Terraform. We'll set up an EC2 instance, two PostgreSQL RDS databases (one for job data, one for Metabase), and the necessary security.
 
-Deploy AWS infrastructure using Terraform, consisting of:
+-----
 
-* 1 EC2 instance
-* 2 PostgreSQL RDS databases
-* 2 Security Groups
-* 1 DB Subnet Group
+## What You'll Need
 
-This infrastructure supports running and storing data collected by a Databricks job listings scraper.
+  * An **AWS account** with configured **access keys**.
+  * An **EC2 key pair**.
+  * **Terraform** installed.
 
-## Requirements
+-----
 
-* AWS account
-* Configured AWS access key
-  [Creating Access Keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey)
-* Configured key pair for EC2
-* Terraform installed
+## Deployment Steps
 
----
-
-## Deployment Walkthrough
-
-### Step 1: Initialize and Plan Terraform
+### Step 1: Prep Terraform
 
 In your project directory, run:
 
@@ -32,26 +23,19 @@ terraform validate
 terraform plan
 ```
 
-`terraform validate` should run successfully.
-`terraform plan` will show you the proposed changes.
+This checks your config and shows what Terraform will do.
 
-### Step 2: Apply Terraform Configuration
+### Step 2: Deploy Infrastructure
 
-Run:
+To kick off the deployment, type:
 
 ```bash
 terraform apply
 ```
 
-When prompted, type:
+When prompted, type `yes`. This usually takes about 5 minutes.
 
-```bash
-yes
-```
-
-Provisioning takes around 5 minutes.
-
-Example output:
+You'll see output like this, grab these values:
 
 ```
 Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
@@ -62,105 +46,90 @@ jobs_db_endpoint = "jobs-db.cyp4keqss5qm.us-east-1.rds.amazonaws.com"
 metabase_db_endpoint = "metabase-db.cyp4keqss5qm.us-east-1.rds.amazonaws.com"
 ```
 
----
+-----
 
 ## Step 3: Set Up Environment Files
 
-### Example `.env` file for Job Scraper:
+You'll need two `.env` files for your applications. **These are examples – fill them in with your actual database hosts and passwords\!**
+
+### For the Job Scraper (`.env`):
 
 ```env
-DB_HOST=your_database_host
-DB_PORT=your_database_port
-DB_NAME=your_database_name
-DB_USER=your_database_user
-DB_PASSWORD=your_database_password
-```
-
----
-
-## Step 4: Configure EC2 Instance
-
-SSH into the EC2 instance:
-
-```bash
-ssh -i ~/jobdash-ec2-key.pem ec2-user@3.84.222.0
-sudo -i
-cd /databricks-job-tracker
-touch .env
-chmod 600 .env
-vim .env
-```
-
-Paste in:
-
-```env
-DB_HOST=[provided by AWS jobs_db_endpoint]
+DB_HOST=your_jobs_db_endpoint_from_terraform_output
 DB_PORT=5432
 DB_NAME=jobsdb
 DB_USER=postgres
-DB_PASSWORD=[your password]
+DB_PASSWORD=your_chosen_jobs_db_password
 ```
 
-### Step 5: Build and Run Scraper Docker Image
-
-Build the image:
-
-```bash
-docker build -t scrape .
-```
-
-Run the container:
-
-```bash
-docker run --rm --env-file .env scrape
-```
-
----
-
-## Step 6: Configure Metabase Container
-
-Create Metabase environment file:
-
-```bash
-touch mb.env
-chmod 600 mb.env
-vim mb.env
-```
-
-Contents:
+### For Metabase (`.mb.env`):
 
 ```env
-MB_DB_HOST=[provided by AWS metabase_db_endpoint]
+MB_DB_HOST=your_metabase_db_endpoint_from_terraform_output
 MB_DB_PORT=5432
-MB_DB_NAME=jobsdb
+MB_DB_NAME=metabasedb
 MB_DB_USER=postgres
-MB_DB_PASS=[your password]
+MB_DB_PASS=your_chosen_metabase_db_password
 ```
 
-Run Metabase container:
+-----
+
+## Step 4: Configure EC2 & Run Scraper
+
+1.  **SSH into your EC2 instance:**
+
+    ```bash
+    ssh -i /path/to/your/keypair.pem ec2-user@<ec2_public_ip>
+    ```
+
+2.  **Go to your project directory:**
+
+    ```bash
+    cd databricks-job-tracker
+    ```
+
+3.  **Create/edit your `.env` files** in this directory using a text editor (like `nano` or `vim`) and paste in your specific details from Step 3.
+
+4.  **Build your scraper's Docker image:**
+
+    ```bash
+    docker build -t scrape .
+    ```
+
+5.  **Run the scraper:**
+
+    ```bash
+    docker run --rm --env-file .env scrape
+    ```
+
+-----
+
+## Step 5: Run Metabase
+
+On your EC2 instance, run the Metabase container:
 
 ```bash
 docker run -d \
   --name metabase \
-  --env-file mb.env \
+  --env-file .mb.env \
   -p 3000:3000 \
   metabase/metabase
 ```
 
-Visit `http://[ec2_public_ip]:3000` in your browser to set up Metabase and connect it to your job data database.
+Give it a minute or two to start. Then, open your browser and go to:
 
----
+`http://[ec2_public_ip]:3000`
 
-## Step 7: Tear Down Infrastructure
+Follow the prompts to set up Metabase and connect it to your job data database.
 
-To destroy all resources:
+-----
+
+## Step 6: Tear Down Infrastructure
+
+When you're done, destroy all resources from your local machine (in your project directory) to avoid charges:
 
 ```bash
 terraform destroy
 ```
 
-When prompted:
-
-```bash
-yes
-```
+Type `yes` when asked.

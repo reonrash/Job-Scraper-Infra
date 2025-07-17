@@ -118,7 +118,7 @@ docker run -d \
 
 Give it a minute or two to start. Then, open your browser and go to:
 
-`http://[ec2_public_ip]:3000`
+`http://[ec2_public_ip]`
 
 Follow the prompts to set up Metabase and connect it to your job data database.
 

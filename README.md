@@ -18,7 +18,7 @@ This guide helps you deploy the AWS infrastructure needed for a Databricks job s
 
 In your project directory, add terraform.tfvars file with following info 
 
-```bash
+```env
 # terraform.tfvars
 
 # Master password for the RDS PostgreSQL instances.

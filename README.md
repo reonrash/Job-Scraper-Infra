@@ -14,7 +14,24 @@ This guide helps you deploy the AWS infrastructure needed for a Databricks job s
 
 ## Deployment Steps
 
-### Step 1: Prep Terraform
+### Step 1: Prep Secret Variables
+
+In your project directory, add terraform.tfvars file with following info 
+
+```bash
+# terraform.tfvars
+
+# Master password for the RDS PostgreSQL instances.
+# IMPORTANT: For production, consider using a secrets manager like AWS Secrets Manager.
+rds_password = "pokemon1!P2345"
+
+# The name of the EC2 Key Pair to use for the EC2 instance.
+key_pair_name = "jobdash-ec2-key"
+```
+
+This info will be used by terrafrom to set dbpasswords and key pair so you can ssh into ec2 instance 
+
+### Step 2: Prep Terraform
 
 In your project directory, run:
 
@@ -25,7 +42,7 @@ terraform plan
 
 This checks your config and shows what Terraform will do.
 
-### Step 2: Deploy Infrastructure
+### Step 3: Deploy Infrastructure
 
 To kick off the deployment, type:
 
@@ -48,7 +65,7 @@ metabase_db_endpoint = "metabase-db.cyp4keqss5qm.us-east-1.rds.amazonaws.com"
 
 -----
 
-## Step 3: Set Up Environment Files
+## Step 4: Set Up Environment Files
 
 There are two env files already created but need user input for two fields. **These are examples – fill them in with your actual database hosts and passwords\!**
 
@@ -74,7 +91,7 @@ MB_DB_PASS=[your_chosen_metabase_db_password]
 
 -----
 
-## Step 4: Configure EC2 & Run Scraper
+## Step 5: Configure EC2 & Run Scraper
 
 1.  **SSH into your EC2 instance:**
 
@@ -104,7 +121,7 @@ MB_DB_PASS=[your_chosen_metabase_db_password]
 
 -----
 
-## Step 5: Run Metabase
+## Step 6: Run Metabase
 
 On your EC2 instance, run the Metabase container:
 
@@ -124,7 +141,7 @@ Follow the prompts to set up Metabase and connect it to your job data database.
 
 -----
 
-## Step 6: Tear Down Infrastructure
+## Step 7: Tear Down Infrastructure
 
 When you're done, destroy all resources on related to this proj (in your project directory) to avoid charges:
 

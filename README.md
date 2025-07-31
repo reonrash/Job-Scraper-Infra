@@ -5,7 +5,7 @@ This guide helps you deploy the AWS infrastructure needed for a Databricks job s
 -----
 ## Image of Metabase application
 
-![Screenshot of Metabase Application](./images/Metabase%20-%20Databrick's%20Job%20Tracker.pdf)
+![Screenshot of Metabase Application](./images/meta.png)
 
 ## What You'll Need
 

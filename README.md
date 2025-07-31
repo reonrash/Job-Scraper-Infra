@@ -23,7 +23,7 @@ In your project directory, add terraform.tfvars file with following info
 
 # Master password for the RDS PostgreSQL instances.
 # IMPORTANT: For production, consider using a secrets manager like AWS Secrets Manager.
-rds_password = "pokemon1!P2345"
+rds_password = "pokemon"
 
 # The name of the EC2 Key Pair to use for the EC2 instance.
 key_pair_name = "jobdash-ec2-key"

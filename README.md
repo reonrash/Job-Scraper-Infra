@@ -128,7 +128,7 @@ On your EC2 instance, run the Metabase container:
 ```bash
 docker run -d \
   --name metabase \
-  --env-file .mb.env \
+  --env-file /home/ec2-user/.mb.env \
   -p 3000:3000 \
   metabase/metabase
 ```

@@ -3,6 +3,9 @@
 This guide helps you deploy the AWS infrastructure needed for a Databricks job scraper using Terraform. We'll set up an EC2 instance, two PostgreSQL RDS databases (one for job data, one for Metabase), metabase application, and some networking.
 
 -----
+## Image of Metabase application
+
+![Screenshot of Metabase Application](./images/Metabase%20-%20Databrick's%20Job%20Tracker.pdf)
 
 ## What You'll Need
 
